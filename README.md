@@ -1,21 +1,49 @@
-# codeindex
+# lein-codeindex
 
-A Leiningen plugin to index code using etags or ctags.
+Index your Clojure project code with all dependencies using
+[etags](https://www.emacswiki.org/emacs/EmacsTags) or
+[ctags](http://ctags.sourceforge.net/).
+
+In short, this [Leiningen](http://leiningen.org) plugin allows you to
+easily index the code and find any function, variable or namespace
+definition used through the code from editors like Emacs, Vim, Sublime
+Text and [many more](https://en.wikipedia.org/wiki/Ctags).
+
+## Prerequisites
+
+Make sure you have installed `etags` (comes with Emacs) or
+`ctags` (distributed usually with Vim).
 
 ## Usage
 
-Use this for user-level plugins:
+To enable `lein-codeindex` for your project, put
 
-Put `[codeindex "0.1.0-SNAPSHOT"]` into the `:plugins` vector of your `:user`
-profile.
+![latest-version](https://clojars.org/lein-codeindex/latest-version.svg)
 
-Use this for project-level plugins:
+into the `:plugins` vector of your project.clj. If you'd like to
+enable it globally for every project, put it in `$HOME/.lein/profiles.clj`.
 
-Put `[codeindex "0.1.0-SNAPSHOT"]` into the `:plugins` vector of your project.clj.
-
-FIXME: and add an example usage that actually makes sense:
+To run it, use:
 
     $ lein codeindex
+
+This will generate Emacs compatible tags using `etags`.
+
+If you'd like to use `ctags` and generate Vi/Vim compatible tags, use:
+
+    $ lein codeindex --vim
+
+or
+
+    $ lein codeindex --ctags --vim
+
+To generate Emacs tags using `ctags`, use:
+
+    $ lein codeindex --ctags
+
+To see other options, run:
+
+    $ lein help codeindex
 
 ## License
 
