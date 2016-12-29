@@ -1,4 +1,4 @@
-(defproject lein-codeindex "0.1.0"
+(defproject lein-codeindex "0.2.0-SNAPSHOT"
   :description "Index code in this project and all dependencies using etags or ctags."
   :url "https://github.com/sanel/lein-codeindex"
   :license {:name "Eclipse Public License"
