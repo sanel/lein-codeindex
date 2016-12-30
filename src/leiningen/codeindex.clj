@@ -69,7 +69,7 @@ and fallback to .lein-codeindex hardcoded value."
                         (let [spath (str path)]
                           (when (and (not (.isDirectory path))
                                      (not (.endsWith spath "project.clj"))
-                                     (re-find #"\.(clj[sc]?|edn)$" spath))
+                                     (re-find #"\.(clj[scx]?|edn)$" spath))
                             (m/debug "  Scanning" spath)
                             (let [ret (shell/sh "etags"
                                                 "-a"
