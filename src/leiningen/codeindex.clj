@@ -14,6 +14,11 @@ and fallback to .lein-codeindex hardcoded value."
              #(or (System/getenv "LEIN_CODEINDEX_DIR")
                   ".lein-codeindex")))
 
+(defn- getenv
+  "Get environment variable or apply fallback if not found."
+  [var fallback]
+  (or (System/getenv var) fallback))
+
 (defn- recursive-walk
   "Recursively walk given folder and execute action."
   [dir action]
@@ -69,9 +74,9 @@ and fallback to .lein-codeindex hardcoded value."
                         (let [spath (str path)]
                           (when (and (not (.isDirectory path))
                                      (not (.endsWith spath "project.clj"))
-                                     (re-find #"\.(clj[scx]?|edn)$" spath))
+                                     (re-find #"\.(clj[scx]?|edn|java)$" spath))
                             (m/debug "  Scanning" spath)
-                            (let [ret (shell/sh "etags"
+                            (let [ret (shell/sh (getenv "TAGS_BIN" "etags")
                                                 "-a"
                                                 "--regex=/[ \\t\\(]*def[a-z]* \\([a-z-!?]+\\)/\\1/"
                                                 "--regex=/[ \\t\\(]*ns \\([a-z0-9.\\-]+\\)/\\1/"
@@ -89,6 +94,7 @@ user can set custom mapping in $HOME/.ctags file."
             "--langmap=clojure:.clj"
             "--langmap=clojure:+.cljs"
             "--langmap=clojure:+.cljc"
+            "--langmap=clojure:+.cljx"
             "--langmap=clojure:+.edn"
             "--regex-clojure=/\\([ \t]*create-ns[ \t]+([-[:alnum:]*+!_:\\/.?]+)/\\1/n,namespace/"
             "--regex-clojure=/\\([ \t]*def[ \t]+([-[:alnum:]*+!_:\\/.?]+)/\\1/d,definition/"
@@ -103,7 +109,7 @@ user can set custom mapping in $HOME/.ctags file."
             "--regex-clojure=/\\([ \t]*intern[ \t]+([-[:alnum:]*+!_:\\/.?]+)/\\1/v,intern/"
             "--regex-clojure=/\\([ \t]*ns[ \t]+([-[:alnum:]*+!_:\\/.?]+)/\\1/n,namespace/"]]
     ;; build args this way as 'shell/sh' is sensitive to nil arguments
-    (->> (concat ["ctags" "-R" (if-not vi-tags "-e")]
+    (->> (concat [(getenv "TAGS_BIN" "ctags") "-R" (if-not vi-tags "-e")]
                  (if local-map mp))
          (remove nil?)
          (apply shell/sh))))
