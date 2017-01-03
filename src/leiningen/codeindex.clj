@@ -73,7 +73,6 @@ and fallback to .lein-codeindex hardcoded value."
   (recursive-walk "." (fn [path]
                         (let [spath (str path)]
                           (when (and (not (.isDirectory path))
-                                     (not (.endsWith spath "project.clj"))
                                      (re-find #"\.(clj[scx]?|edn|java)$" spath))
                             (m/debug "  Scanning" spath)
                             (let [ret (shell/sh (getenv "TAGS_BIN" "etags")
