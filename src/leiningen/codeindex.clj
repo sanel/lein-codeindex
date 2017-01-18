@@ -116,9 +116,9 @@ user can set custom mapping in $HOME/.ctags file."
 (defn- gen-tags
   "Generate tags, using engine depending on parameters."
   [args]
-  (if (some #{"--ctags" "--vi" "--vim"} args)
-    (gen-tags-ctags (some #{"--vi" "--vim"} args)
-                    (not (some #{"--no-langmap"} args)))
+  (if (some #{"--ctags" "--vi" "--vim" ":ctags" ":vi" ":vim"} args)
+    (gen-tags-ctags (some #{"--vi" "--vim" ":vi" ":vim"} args)
+                    (not (some #{"--no-langmap" ":no-langmap"} args)))
     (gen-tags-etags)))
 
 (defn codeindex
@@ -141,13 +141,12 @@ Sample usage:
   lein codeindex                      - generate index using etags
   lein codeindex --update             - do not extract jars but only update index
   lein codeindex --vi                 - generate Vi/Vim compatible tags
-  lein codeindex --ctags --no-langmap - use ctags but also user custom Clojure language mappings
-"
+  lein codeindex --ctags --no-langmap - use ctags but also user custom Clojure language mappings"
   [project & args]
-  (condp = (first args)
-    "--clean"  (remove-index-dir)
-    ;; update command will just reindex code, without extracting
-    "--update" (do (gen-tags args) (System/exit 0))
-    (do
-      (extract-jars project)
-      (gen-tags args))))
+  (cond
+   (some #{"--clean" ":clean"} args) (remove-index-dir)
+   ;; update command will just reindex code, without extracting
+   (some #{"--update" ":update"} args) (gen-tags args)
+   :else (do
+           (extract-jars project)
+           (gen-tags args))))
