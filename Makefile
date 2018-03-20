@@ -11,8 +11,10 @@ endef
 all: install
 
 clean:
+	lein codeindex :clean
 	lein clean
 	$(RM) pom.xml
+	$(RM) TAGS GPATH GRTAGS GTAGS tags
 
 install:
 	lein install
