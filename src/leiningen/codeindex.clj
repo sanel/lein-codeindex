@@ -129,7 +129,7 @@ user can set custom mapping in $HOME/.ctags file."
    (gen-tags-ctags (some #{"--vi" "--vim" ":vi" ":vim"} args)
                    (not (some #{"--no-langmap" ":no-langmap"} args)))
 
-   (some #{"--gtags :gtags"} args)
+   (some #{"--gtags" ":gtags"} args)
    (gen-tags-gtags)
 
    :else
