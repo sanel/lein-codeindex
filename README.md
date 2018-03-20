@@ -1,8 +1,8 @@
 # lein-codeindex
 
-Index your Clojure project code with all dependencies using
-[etags](https://www.emacswiki.org/emacs/EmacsTags) or
-[ctags](http://ctags.sourceforge.net/).
+Index your Clojure and Java project code with all dependencies using
+[etags](https://www.emacswiki.org/emacs/EmacsTags),
+[ctags](http://ctags.sourceforge.net/) or [gtags](https://www.gnu.org/software/global/).
 
 In short, this [Leiningen](http://leiningen.org) plugin allows you to
 easily index the code and find any function, variable or namespace
@@ -11,8 +11,8 @@ Text and [many more](https://en.wikipedia.org/wiki/Ctags).
 
 ## Prerequisites
 
-Make sure you have installed `etags` (comes with Emacs) or
-`ctags` (distributed usually with Vim).
+Make sure you have installed `etags` (comes with Emacs), `ctags`
+(distributed usually with Vim) or `gtags` (comes with `GNU Global`).
 
 ## Usage
 
@@ -47,7 +47,7 @@ To see other options, run:
 
 ## License
 
-Copyright © 2016 Sanel Zukan
+Copyright © 2018 Sanel Zukan
 
 Distributed under the Eclipse Public License either version 1.0 or (at
 your option) any later version.

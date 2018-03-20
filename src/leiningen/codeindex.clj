@@ -113,16 +113,30 @@ user can set custom mapping in $HOME/.ctags file."
          (remove nil?)
          (apply shell/sh))))
 
+(defn- gen-tags-gtags
+  "Generate tags using gtags/global. Details are up to gtags/global configration."
+  []
+  (m/info "Indexing using gtags...")
+  (let [ret (shell/sh (getenv "TAGS_BIN" "gtags"))]
+    (when-not (= "" (:err ret))
+      (m/warn (:err ret)))))
+
 (defn- gen-tags
   "Generate tags, using engine depending on parameters."
   [args]
-  (if (some #{"--ctags" "--vi" "--vim" ":ctags" ":vi" ":vim"} args)
-    (gen-tags-ctags (some #{"--vi" "--vim" ":vi" ":vim"} args)
-                    (not (some #{"--no-langmap" ":no-langmap"} args)))
-    (gen-tags-etags)))
+  (cond
+   (some #{"--ctags" "--vi" "--vim" ":ctags" ":vi" ":vim"} args)
+   (gen-tags-ctags (some #{"--vi" "--vim" ":vi" ":vim"} args)
+                   (not (some #{"--no-langmap" ":no-langmap"} args)))
+
+   (some #{"--gtags :gtags"} args)
+   (gen-tags-gtags)
+
+   :else
+   (gen-tags-etags)))
 
 (defn codeindex
-  "Index code in this project and all dependencies using etags or ctags.
+  "Index code in this project and all dependencies using etags, ctags or global/gtags.
 
 This command will scan all .clj, .cljs, .cljc and .edn files and create tag or index
 file, suitable for usage from Emacs, Vi/Vim and many other editors for easier symbol
@@ -141,7 +155,8 @@ Sample usage:
   lein codeindex                      - generate index using etags
   lein codeindex --update             - do not extract jars but only update index
   lein codeindex --vi                 - generate Vi/Vim compatible tags
-  lein codeindex --ctags --no-langmap - use ctags but also user custom Clojure language mappings"
+  lein codeindex --ctags --no-langmap - use ctags but also user custom Clojure language mappings
+  lein codeindex --gtags              - use gtags/global"
   [project & args]
   (cond
    (some #{"--clean" ":clean"} args) (remove-index-dir)
