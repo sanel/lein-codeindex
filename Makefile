@@ -12,6 +12,7 @@ all: install
 
 clean:
 	lein clean
+	$(RM) pom.xml
 
 install:
 	lein install
@@ -23,7 +24,7 @@ deploy:
 version-bump:
 	$(call do-version-bump,$(LEVEL))
 
-deploy-release: 
+deploy-release:
 	$(call do-version-bump,release)
 	$(eval VERSION ?= $(shell awk '/defproject/ {print $$3}' project.clj | sed -e 's/"//g' -e 's/-SNAPSHOT//g'))
 	@git commit project.clj -m "Release bump to $(VERSION)"

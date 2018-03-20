@@ -117,7 +117,7 @@ user can set custom mapping in $HOME/.ctags file."
   "Generate tags using gtags/global. Details are up to gtags/global configration."
   []
   (m/info "Indexing using gtags...")
-  (let [ret (shell/sh (getenv "TAGS_BIN" "gtags"))]
+  (let [ret (shell/sh (getenv "TAGS_BIN" "gtags") "--accept-dotfiles")]
     (when-not (= "" (:err ret))
       (m/warn (:err ret)))))
 
