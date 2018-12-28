@@ -7,17 +7,17 @@
             [clojure.java.shell :as shell])
   (:import java.io.File))
 
-(def ^{:doc "Returns index folder. First checks if LEIN_CODEINDEX_DIR env
-and fallback to .lein-codeindex hardcoded value."
-       :private true}
-  index-dir (memoize
-             #(or (System/getenv "LEIN_CODEINDEX_DIR")
-                  ".lein-codeindex")))
 
 (defn- getenv
   "Get environment variable or apply fallback if not found."
   [var fallback]
   (or (System/getenv var) fallback))
+
+(def ^{:doc "Returns index folder. First checks if LEIN_CODEINDEX_DIR env
+and fallback to .lein-codeindex hardcoded value."
+       :private true}
+  index-dir (memoize
+             #(getenv "LEIN_CODEINDEX_DIR" ".lein-codeindex")))
 
 (defn- recursive-walk
   "Recursively walk given folder and execute action."
